@@ -1,11 +1,14 @@
 import pydoc
 import json
+import os
 import numpy as np
 from loguru import logger
 
 from src.data.dataset import CustomAudioDataset
 from src.pipeline import PipelineGen
+from src.utils.constants import REPORTS_DIR, MODELS_DIR
 from sklearn.model_selection import train_test_split
+
 
 
 class PipelineTrainer(PipelineGen):
@@ -44,13 +47,12 @@ class PipelineTrainer(PipelineGen):
                              f"Please check the error:\n{e}")
                 obj = None
 
-
             # assign to class attribute
             exec(f"self.{module_name} = obj")
 
         return config_gen_args
         
-    def run_pipeline(self):
+    def run_pipeline(self, push_model_to_hf: bool = False):
         # data loader
         df_info = self.loader.transform()
 
@@ -116,8 +118,45 @@ class PipelineTrainer(PipelineGen):
         # start training
         self.trainer.train()
 
-        logger.debug('Completed')
+        # Evaluate
+        eval_ = self.trainer.trainer.evaluate()
+
+        self.save_results_json()  # save results to json format
+
+        # HF push
+        if push_model_to_hf:
+            self.push_to_hf()
+
+        logger.debug('Completed!')
 
 
-    def export_artifacts(self, out_dir: str = "reports"):
-        return None
+    def save_results_json(self, out_dir: str = REPORTS_DIR, data: dict = None):
+        # Output saving path
+        path_ = os.path.join(
+            str(out_dir), 
+            f"eval_results_run_{self.run_id}.json"
+        )
+        
+        # Json dump
+        json.dump(data, open(path_, 'w'), indent=5)
+
+    def push_to_hf(self):
+        # Model name (to show up at HF)
+        model_name = 'music-genre'
+
+        # Pushing params
+        kwargs = {
+            "dataset_tags": "gtzan",
+            "dataset": "GTZAN",
+            "model_name": f"{model_name}-finetuned-gtzan",
+            "finetuned_from": self.model.model_id,
+            "tasks": "audio-classification",
+        }
+
+        # Push model to HF (w/ success messsage)
+        try:
+            self.trainer.trainer.push_to_hub(**kwargs)
+            logger.debug("Successfully pushed to HF")
+        except Exception as e:
+            logger.debug(f"Push not finished. Check the error:\n{e}")
+

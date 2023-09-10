@@ -20,6 +20,5 @@ datasets[audio]
 accelerate 
 evaluate 
 wandb
-torch
 scikit-learn
 huggingface_hub

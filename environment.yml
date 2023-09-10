@@ -9,3 +9,4 @@ dependencies:
   - cudatoolkit=11.1
   - pip
   - virtualenv
+  - pytorch
