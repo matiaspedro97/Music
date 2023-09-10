@@ -1,7 +1,7 @@
 music_genres
 ==============================
 
-Repo with some approaches aiming to get a Music Genre Classifier
+Repository compiling approaches that tackle a Music Genre Classification task.
 
 Project Organization
 ------------
@@ -36,15 +36,33 @@ Project Organization
     │   ├── __init__.py    <- Makes src a Python module
     │   │
     │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
+    │   │   └── dataset.py
+    |   |   └── parser.py
     │   │
     │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
+    │   │   └── extractor.py
+    │   │   └── metrics.py
+    │   │   └── preprocessor.py
     │   │
     │   ├── models         <- Scripts to train models and then use trained models to make
     │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
+    │   │   └── dl_model.py
+    |   |
+    │   ├── pipeline         <- Scripts to compile the other modules and build sequential
+    │   │   │                 ML-based pipelines
+    │   │   └── dl_model.py
+    │   │
+    │   ├── runs         <- Scripts to run ML pipelines implemented on pipelines module
+    │   │   │            
+    │   │   └── run_train.py
+    │   │
+    │   ├── train         <- Scripts that implement trainer classes that manage and guide
+    │   │   │               model training
+    │   │   └── trainer.py
+    │   │
+    │   ├── utils         <- Scripts compiling auxiliary functions called in any of the 
+    │   │   │               other modules
+    │   │   └── trainer.py
     │   │
     │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
     │       └── visualize.py
@@ -54,4 +72,46 @@ Project Organization
 
 --------
 
+## Description
+
+This repository implements a simple music genre classification approach based on Audio model pre-trained and deployed to HuggingFace.
+
+The described model was fine-tuned on the GTZAN dataset (aka, audio MNIST), using DistilHubert model (example purposes).
+
+
+## Demo
+Please try it out via the HuggingFace API: <a target="_blank" href="https://huggingface.co/pedromatias97/tmp_trainer">Inference Demo</a>
+
+
+## Contributions
+
+Contributions are welcome! If you want to contribute to the project, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them with descriptive commit messages.
+4. Push your changes to your forked repository.
+5. Submit a pull request detailing your changes.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+## Acknowledgements
+
+- [HuggingFace](https://huggingface.co/) - Library used for getting the model training process easy and agile.
+- [Pytorch](https://pytorch.org/) - Library providing the deep learning framework for training and deploying neural network models.  
+
+## Contact
+For any questions or inquiries, please contact matiaspedro97@gmail.com
+
+
+
+
+
+
+
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
+
+
+
