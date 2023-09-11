@@ -79,6 +79,44 @@ This repository implements a simple music genre classification approach based on
 The described model was fine-tuned on the GTZAN dataset (aka, audio MNIST), using DistilHubert model (example purposes).
 
 
+## Setup Environment
+To setup the environment, you should build two distinct virtual environment: (1) conda environment (with basic ML project packages) and (2) virtualenv (with essencial packages to run the ML pipelines)
+
+#### 1. Make sure to install Anaconda or Miniconda
+
+#### 2. Setup the Conda enviroment.
+```bash
+conda create env -file environment.yml
+```
+
+#### 3. Activate the new environment
+```bash
+conda deactivate
+
+conda activate python3.8
+```
+
+#### 4. Build the dev virtualenv on top of the conda environment
+```bash
+virtualenv .venv-dev
+```
+
+#### 5. Activate the dev virtualenv
+
+```bash
+. .venv-dev/bin/activate  # linux
+```
+OR 
+```bash
+.venv-dev/Scripts/activate  # windows
+```
+
+#### 6. You are now able to run the scripts
+```bash
+python src/runs/run_train.py
+```
+
+
 ## Demo
 Please try it out via the HuggingFace API: <a target="_blank" href="https://huggingface.co/pedromatias97/tmp_trainer">Inference Demo</a>
 
