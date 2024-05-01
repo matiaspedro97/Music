@@ -1,0 +1,61 @@
+{
+    "run_id": 1,
+    "run_description": "nothing",
+    "label_name": "genre",
+    "path_name": "path",
+    "model_name": "music-genre-detector-finetuned-gtzan_dset",
+    "train_size": 0.8,
+    "test_size": 0.2,
+    "group_name": null,
+    "modules": {
+        "loader": {
+            "class_": "data.dataset.DataLoader",
+            "params_": {
+                "parse_func": "get_df_gtzan",
+                "dset_path": "GTZAN_DIR"
+            }
+        },
+        "preprocessor": {
+            "class_": "features.preprocessor.AudioPreProcessor",
+            "params_": {
+                "input_dur": 10,
+                "sample_rate": 16000,
+                "check_norm": 1
+            }
+        },
+        "extractor": {
+            "class_": "features.extractor.HFAudioFeatureExtractor",
+            "params_": {
+                "model_id": "ntu-spml/distilhubert",
+                "do_normalize": 1,
+                "return_attention_mask": 1,
+                "max_dur": 10
+            }
+        },
+        "model": {
+            "class_": "models.dl_model.AudioClassifierHead",
+            "params_": {
+                "model_id": "ntu-spml/distilhubert"
+            }
+        },
+        "trainer": {
+            "class_": "train.trainer.HFAudioTrainer",
+            "params_": {
+                "output_dir": "models/genre-recognizer-finetuned-gtzan_dset",
+                "evaluation_strategy": "epoch",
+                "save_strategy": "epoch",
+                "learning_rate": 9e-5,
+                "per_device_train_batch_size": 4,
+                "gradient_accumulation_steps": 8,
+                "per_device_eval_batch_size": 4,
+                "num_train_epochs": 7,
+                "warmup_ratio": 0.1,
+                "logging_steps": 30,
+                "load_best_model_at_end": 1,
+                "metric_for_best_model":"accuracy",
+                "fp16": 0,
+                "push_to_hub": 1
+            }
+        }
+    }
+}
